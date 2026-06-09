@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
@@ -24,6 +26,8 @@ app.post("/generate-ipm", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("IPM API running on port 3000");
+const port = process.env.PORT || 3001;
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
