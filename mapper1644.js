@@ -7,39 +7,33 @@ function formatDateToYYMMDD(date = new Date()) {
 }
 
 function build1644(rows, type) {
-
   const today = formatDateToYYMMDD();
 
-  return rows.map((r, idx) => ({
-
+  const base = {
     mti: "1644",
-
-    de24: type === "PRE" ? "697" : "695",
-
-    de71: String(idx + 1).padStart(8, "0"),
-
+    de71: "00000001",
     pds0105: {
       s1: "002",
-
-      // sysdate
       s2: today,
-
-      // increment each time
-      s3: String(2108 + idx).padStart(11, "0"),
-
+      s3: "00000002108",
       s4: "00001"
-    },
+    }
+  };
 
-    ...(type === "PRE"
-      ? {
-          pds0122: "T"
-        }
-      : {
-          pds0301: "0000000000015000",
+  if (type === "PRE") {
+    return {
+      ...base,
+      de24: "697",
+      pds0122: "T"
+    };
+  }
 
-          pds0306: String(idx + 1).padStart(8, "0")
-        })
-  }));
+  return {
+    ...base,
+    de24: "695",
+    pds0301: "0000000000015000",
+    pds0306: "00000001"
+  };
 }
 
 module.exports = { build1644 };

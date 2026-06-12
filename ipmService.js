@@ -65,17 +65,12 @@ async function generateIPM(pan, aliaspan) {
     }
 
     // =========================
-    // 3. BUILD JSON (FIXED)
+    // 3. BUILD JSON (IPM LOGICAL)
     // =========================
-    const header = build1644(rows, "PRE");
-    const footer = build1644(rows, "POST");
-
-    const transactions = rows.map(row => build1240(row, pan));
-
     const fileContent = [
-      header,
-      ...transactions,
-      footer
+      build1644(rows, "PRE"),
+      ...rows.map(row => build1240(row, pan)),
+      build1644(rows, "POST")
     ];
 
     const jsonFile = `approved_authorization_${Date.now()}.json`;
