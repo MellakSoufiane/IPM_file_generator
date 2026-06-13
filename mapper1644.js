@@ -6,7 +6,7 @@ function formatDateToYYMMDD(date = new Date()) {
   return yy + mm + dd;
 }
 
-function build1644(rows, type) {
+function build1644(type, trailerData = {}) {
   const today = formatDateToYYMMDD();
 
   const base = {
@@ -31,8 +31,8 @@ function build1644(rows, type) {
   return {
     ...base,
     de24: "695",
-    pds0301: "0000000000015000",
-    pds0306: "00000001"
+    pds0301: String(trailerData.totalAmount || 0).padStart(16, "0"),
+    pds0306: String(trailerData.totalTransactions || 0).padStart(8, "0")
   };
 }
 
