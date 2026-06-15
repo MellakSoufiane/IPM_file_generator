@@ -67,25 +67,21 @@ async function generateIPM(pan, aliaspan) {
     // =========================
     // 3. BUILD JSON (IPM LOGICAL)
     // =========================
-    const totalTransactions = rows.length;
+    const totalTransactions = rows.length+2;
 
-    const totalAmountMinorUnits = rows.reduce((sum, row) => {
-      const amt = Number(row.billing_amount || 0);
+    const totalAmountMinorUnits = rows.reduce((sum, row) => 
+      {
+        return sum + Math.round(Number(row.billing_amount || 0) * 100);
+      }, 0);
 
-      // detect decimals dynamically
-      const decimals = (row.billing_amount?.toString().split(".")[1] || "").length;
-
-      const multiplier = Math.pow(10, decimals);
-
-      return sum + Math.round(amt * multiplier);
-    }, 0);
+    const formattedTotal = String(totalAmountMinorUnits).padStart(16, "0");
     const fileContent = [
       build1644("PRE"),
 
       ...rows.map(row => build1240(row, pan)),
 
       build1644("POST", {
-        totalAmount: totalAmountMinorUnits,
+        totalAmount: formattedTotal,
         totalTransactions
       })
     ];

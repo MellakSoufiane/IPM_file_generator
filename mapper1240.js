@@ -102,17 +102,17 @@ function clean(val) {
 function buildDE43(cardAccNameAddress) {
   const parts = clean(cardAccNameAddress).split(/\s{2,}/);
 
-  const merchant = parts[0] || "Basement LLC";
-  const city = parts[1] || "Dubai";
-  const country = parts[2] || "ARE";
+  const merchant = parts[0] || "Merchant name         ";
+  const city = parts[1] || "Merchant cit";
+  const country = parts[2] || "AUS";
 
   return {
-    s1: merchant,
-    s2: "MAG 218 Tower, Dubai Marina",
-    s3: city,
-    s4: "          ", // 10 spaces EXACT
+    s1: "Merchant name         ",
+    s2: "1234 Main Street",
+    s3: "Merchant city",
+    s4: "573972    ", // 10 spaces EXACT
     s5: "   ",        // 3 spaces EXACT
-    s6: country
+    s6: "AUS"
   };
 }
 

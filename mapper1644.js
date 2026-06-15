@@ -11,7 +11,6 @@ function build1644(type, trailerData = {}) {
 
   const base = {
     mti: "1644",
-    de71: "00000001",
     pds0105: {
       s1: "002",
       s2: today,
@@ -24,6 +23,7 @@ function build1644(type, trailerData = {}) {
     return {
       ...base,
       de24: "697",
+      de71: "00000001",
       pds0122: "T"
     };
   }
@@ -31,6 +31,7 @@ function build1644(type, trailerData = {}) {
   return {
     ...base,
     de24: "695",
+    de71: "00000003",
     pds0301: String(trailerData.totalAmount || 0).padStart(16, "0"),
     pds0306: String(trailerData.totalTransactions || 0).padStart(8, "0")
   };
