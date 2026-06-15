@@ -64,32 +64,33 @@ function formatAmount(val) {
   return String(converted).padStart(12, "0");
 }
 
-function generateDE31(row) {
-  const date = row.transaction_local_date ? new Date(row.transaction_local_date) : new Date();
+let acquirerSequenceNumber = 23958022189;
 
-  // s2 = 6 digits (custom micro date/sequence)
-  // using YYDDD + 1 digit padding
-  const yy = String(date.getFullYear()).slice(-2);
-  const start = new Date(date.getFullYear(), 0, 0);
-  const doy = String(Math.floor((date - start) / 86400000)).padStart(3, "0");
-  const s2 = (yy + doy).slice(-6).padStart(6, "0");
+function generateDE31() {
+  const now = new Date();
 
-  // s3 = 4 digits (bank / routing / issuer fragment)
-  const s3 = (row.issuing_bank || "0000").toString().slice(-4).padStart(4, "0");
+  // s3 = YDDD (last digit of year + Julian day)
+  const yearDigit = String(now.getFullYear()).slice(-1);
 
-  // s4 = 11 digits (transaction micro reference)
-  const base =
-    (row.internal_stan || "").toString().padStart(6, "0") +
-    (row.reference_number || "").toString().slice(-5);
+  const startOfYear = new Date(now.getFullYear(), 0, 0);
+  const dayOfYear = String(
+    Math.floor((now - startOfYear) / 86400000)
+  ).padStart(3, "0");
 
-  const s4 = base.slice(0, 11).padStart(11, "0");
+  const s3 = yearDigit + dayOfYear;
+
+  // s4 = incrementing acquirer sequence number
+  const s4 = String(acquirerSequenceNumber++);
+  
+  // s5 = random check digit
+  const s5 = String(Math.floor(Math.random() * 10));
 
   return {
     s1: "0",
-    s2,
+    s2: "230120",
     s3,
     s4,
-    s5: "4",
+    s5,
   };
 }
 
